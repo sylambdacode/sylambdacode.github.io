@@ -1,5 +1,6 @@
 ---
 title: Lambda演算介绍
+tags: [Lambda Calculus, 柯里化]
 template: default
 ---
 
