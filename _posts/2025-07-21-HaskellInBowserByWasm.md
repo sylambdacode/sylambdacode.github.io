@@ -114,9 +114,9 @@ executable test
                     .then(result => {
                         console.log(`stringTest("hello") = "${result}"`);
                     });
-        }
-        runHaskellWasm();
-    </script>
+            }
+            runHaskellWasm();
+        </script>
     </body>
 </html>
 ```
