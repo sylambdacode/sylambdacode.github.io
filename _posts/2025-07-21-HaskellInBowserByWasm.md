@@ -30,14 +30,17 @@ $ ghcup install cabal
 ```
 
 # 编辑代码
+## 1. 创建一个新项目
 
-1. 使用Cabal创建一个新项目：
+使用Cabal创建一个新项目：
 
 ```sh
 $ cabal init --non-interactive
 ```
 
-2. 删除自动生成的Main.hs并创建Test.hs文件，写入以下内容：
+## 2. 编辑Haskell代码
+
+删除自动生成的Main.hs并创建Test.hs文件，写入以下内容：
 
 ```haskell
 module Test where
@@ -55,7 +58,9 @@ stringTest inputJSString = toJSString ("stringTest: " ++ haskellString)
     where haskellString = fromJSString inputJSString
 ```
 
-3. 打开项目的Cabal配置文件，按照下面的例子进行修改：
+## 3. 编辑Cabal配置
+
+打开项目的Cabal配置文件，按照下面的例子进行修改：
 
 ```cabal
 -- 此处省略部分配置
@@ -79,7 +84,9 @@ executable test
 -- 此处省略部分配置
 ```
 
-4. 在一个空目录创建test.html，写入下面的代码：
+## 4. 编写HTML文件
+
+在一个空目录创建test.html，写入下面的代码：
 
 ```html
 <!DOCTYPE html>
@@ -134,7 +141,9 @@ executable test
 
 # 编译运行
 
-1. 首先将Haskell代码编译为WASM文件：
+## 1. 编译生成WASM文件
+
+首先将Haskell代码编译为WASM文件：
 
 ```sh
 $ cabal --with-compiler=wasm32-wasi-ghc-9.12 --with-hc-pkg=wasm32-wasi-ghc-pkg-9.12 --with-hsc2hs=wasm32-wasi-hsc2hs-9.12 --with-haddock=wasm32-wasi-haddock-9.12 build
@@ -142,7 +151,9 @@ $ cabal --with-compiler=wasm32-wasi-ghc-9.12 --with-hc-pkg=wasm32-wasi-ghc-pkg-9
 
 上面的命令执行完成后，将会在Haskell工程的`dist-newstyle`文件夹下生成test.wasm文件，笔者生成的文件路径位于：`/dist-newstyle/build/wasm32-wasi/ghc-9.12.2.20250327/test-0.1.0.0/x/test/build/test/test.wasm`。将该WASM文件复制到test.html文件的同级目录下，以便JavaScript代码能够顺利加载。
 
-2. 生成JavaScript FFI代码：
+## 2. 生成JavaScript FFI代码
+
+通过执行下面的命令，生成JavaScript FFI代码：
 
 ```sh
 $ $(wasm32-wasi-ghc-9.12 --print-libdir)/post-link.mjs -i test.wasm -o test.js
@@ -154,7 +165,9 @@ $ $(wasm32-wasi-ghc-9.12 --print-libdir)/post-link.mjs -i test.wasm -o test.js
 $ source ~/.ghc-wasm/env
 ```
 
-3. 编译browser_wasi_shim：
+## 3. 编译[browser_wasi_shim](https://github.com/bjorn3/browser_wasi_shim)
+
+[browser_wasi_shim](https://github.com/bjorn3/browser_wasi_shim)是一个使用纯JavaScript编写而成的WASI环境，能够在浏览器中提供WASI相关接口。
 
 首先使用git克隆[browser_wasi_shim](https://github.com/bjorn3/browser_wasi_shim)项目：
 
@@ -171,10 +184,12 @@ $ npm run build
 
 执行成功后，在browser_wasi_shim项目根目录下会生成dist文件夹。在test.html文件同级目录下创建browser_wasi_shim文件夹，并将dist文件夹中的内容复制到刚刚创建的browser_wasi_shim目录下。
 
-4. 最终的文件目录如下图：
+## 4. 运行
+
+最终的文件目录如下图：
 
 ![测试文件目录](/static/images/2025-07-21-HaskellInBowserByWasm/DirectoryStructure.png)
 
-5. 打开浏览器，进入test.html页面（需要用HTTP的形式），并打开开发者工具可以看到执行结果如下图所示。
+打开浏览器，进入test.html页面（需要用HTTP的形式），并打开开发者工具可以看到执行结果如下图所示。
 
 ![运行结果](/static/images/2025-07-21-HaskellInBowserByWasm/RunResult.png)
