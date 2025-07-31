@@ -1,5 +1,5 @@
 title: SY-λ Code Lab
 timezone: Asia/Shanghai
-remote_theme: huangyz0918/moving
+remote_theme: riggraz/no-style-please
 plugins:
 - jekyll-remote-theme
