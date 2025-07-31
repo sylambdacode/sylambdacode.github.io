@@ -4,8 +4,6 @@ tags: [Haskell, WASM, JavaScript]
 template: default
 ---
 
-<a href="https://sylambdacode.github.io/2025/07/21/HaskellInBowserByWasm.html">在浏览器中运行Haskell代码</a> © 2025 by <a href="https://sylambdacode.github.io/">sylambdacode</a> is licensed under <a href="https://creativecommons.org/licenses/by-nc/4.0/">CC BY-NC 4.0</a><img src="https://mirrors.creativecommons.org/presskit/icons/cc.svg" alt="" style="max-width: 1em;max-height:1em;margin-left: .2em;"><img src="https://mirrors.creativecommons.org/presskit/icons/by.svg" alt="" style="max-width: 1em;max-height:1em;margin-left: .2em;"><img src="https://mirrors.creativecommons.org/presskit/icons/nc.svg" alt="" style="max-width: 1em;max-height:1em;margin-left: .2em;">
-
 # 前置工作
 1. 安装GHCup，安装方法详见[官网](https://www.haskell.org/ghcup/)。
 

@@ -4,9 +4,6 @@ tags: [Lambda Calculus, 柯里化]
 template: default
 ---
 
-<a href="https://sylambdacode.github.io/2025/07/19/LambdaCalculusIntroduction.html">Lambda演算介绍</a> © 2025 by <a href="https://sylambdacode.github.io/">sylambdacode</a> is licensed under <a href="https://creativecommons.org/licenses/by-nc/4.0/">CC BY-NC 4.0</a><img src="https://mirrors.creativecommons.org/presskit/icons/cc.svg" alt="" style="max-width: 1em;max-height:1em;margin-left: .2em;"><img src="https://mirrors.creativecommons.org/presskit/icons/by.svg" alt="" style="max-width: 1em;max-height:1em;margin-left: .2em;"><img src="https://mirrors.creativecommons.org/presskit/icons/nc.svg" alt="" style="max-width: 1em;max-height:1em;margin-left: .2em;">
-
-
 # 前言
 本片文章旨在帮助有兴趣了解Lambda演算，但是没有相关数学基础的读者快速理解Lambda演算的基本思想。为了能够更好的满足这种需求，本篇文章将是非严谨的、启发式的。请那些希望学习严谨Lambda演算的读者阅读相关论文与书籍。
 
