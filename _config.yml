@@ -6,7 +6,7 @@ show_excerpts: true
 
 moving:
   about_you: 探索λ世界
-  date_format: "%m %d"
+  date_format: "%m-%d"
   back_to: "首页"
   social_links:
     github: sylambdacode
