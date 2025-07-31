@@ -1,5 +1,14 @@
 title: SY-λ Code Lab
+auther: sylambdacode
+url: https://sylambdacode.github.io/
+description: 一个纯粹的计算机理论与技术博客
+show_excerpts: true
+
+moving:
+  about_you: 探索λ世界
+  date_format: "%m %d"
+  back_to: "Home"
 timezone: Asia/Shanghai
-remote_theme: pages-themes/cayman@v0.2.0
+remote_theme: huangyz0918/moving
 plugins:
 - jekyll-remote-theme
