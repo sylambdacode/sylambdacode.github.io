@@ -1,7 +1,7 @@
 ---
 title: 在浏览器中运行Haskell代码
 tags: [Haskell, WASM, JavaScript]
-template: default
+layout: post
 ---
 
 # 前置工作

@@ -1,7 +1,7 @@
 ---
 title: 不动点组合子
 tags: [不动点组合子, Lambda Calculus, 递归]
-layout: default
+layout: post
 ---
 
 # 前言
