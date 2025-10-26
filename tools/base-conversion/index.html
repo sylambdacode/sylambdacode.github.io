@@ -23,31 +23,42 @@ layout: default
         <br />
         <label for="input-base16">16进制</label>
         <input type="text" id="input-base16">
+        <br />
+        <br />
+        <br />
+        <label for="input-basex">自定义进制</label>
+        <input type="text" id="input-basex">
+        <br />
+        <br />
+        <label for="input-basex-char-list">自定义进制序列</label>
+        <input type="text" id="input-basex-char-list" value="012345">
         <script>
             let inputBase2 = document.getElementById('input-base2');
             let inputBase4 = document.getElementById('input-base4');
             let inputBase8 = document.getElementById('input-base8');
             let inputBase10 = document.getElementById('input-base10');
             let inputBase16 = document.getElementById('input-base16');
+            let inputBasex = document.getElementById('input-basex');
+            let inputBasexCharList = document.getElementById('input-basex-char-list');
             let inputList = [
-                {baseCharList: '01', documentElement: inputBase2},
-                {baseCharList: '01234', documentElement: inputBase4},
-                {baseCharList: '01234567', documentElement: inputBase8},
-                {baseCharList: '0123456789', documentElement: inputBase10},
-                {baseCharList: '0123456789abcdef', documentElement: inputBase16},
-                // {baseCharList: '01', documentElement: inputBase2},
+                {baseCharList: () => '01', documentElement: inputBase2},
+                {baseCharList: () => '01234', documentElement: inputBase4},
+                {baseCharList: () => '01234567', documentElement: inputBase8},
+                {baseCharList: () => '0123456789', documentElement: inputBase10},
+                {baseCharList: () => '0123456789abcdef', documentElement: inputBase16},
+                {baseCharList: () => inputBasexCharList.value, documentElement: inputBasex},
             ];
             for (i = 0; i < inputList.length; i++) {
                 let inputConfig = inputList[i];
                 inputConfig.documentElement.addEventListener('input', function() {
-                    this.value = [...this.value].filter(c => [...inputConfig.baseCharList].includes(c)).join('');
-                    let n = fromStringInBase([...inputConfig.baseCharList])([...this.value]);
+                    this.value = [...this.value].filter(c => [...inputConfig.baseCharList()].includes(c)).join('');
+                    let n = fromStringInBase([...inputConfig.baseCharList()])([...this.value]);
                     for (j = 0; j < inputList.length; j++) {
                         if (i == j) {
                             continue;
                         }
                         let showInputConfig = inputList[j];
-                        showInputConfig.documentElement.value = toStringInBase([...showInputConfig.baseCharList])(n).join('');
+                        showInputConfig.documentElement.value = toStringInBase([...showInputConfig.baseCharList()])(n).join('');
                     }
                 });
             }
