@@ -1,0 +1,81 @@
+---
+layout: default
+---
+
+    <head>
+        <meta charset="UTF-8">
+        <title>进制转换工具</title>
+        <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    </head>
+    <body>
+        <label for="input-base2">2进制</label>
+        <input type="text" id="input-base2">
+        <br />
+        <label for="input-base4">4进制</label>
+        <input type="text" id="input-base4">
+        <br />
+        <label for="input-base8">8进制</label>
+        <input type="text" id="input-base8">
+        <br />
+        <label for="input-base10">10进制</label>
+        <input type="text" id="input-base10">
+        <br />
+        <label for="input-base16">16进制</label>
+        <input type="text" id="input-base16">
+        <script>
+            let inputBase2 = document.getElementById('input-base2');
+            let inputBase4 = document.getElementById('input-base4');
+            let inputBase8 = document.getElementById('input-base8');
+            let inputBase10 = document.getElementById('input-base10');
+            let inputBase16 = document.getElementById('input-base16');
+            let inputList = [
+                {baseCharList: '01', documentElement: inputBase2},
+                {baseCharList: '01234', documentElement: inputBase4},
+                {baseCharList: '01234567', documentElement: inputBase8},
+                {baseCharList: '0123456789', documentElement: inputBase10},
+                {baseCharList: '0123456789abcdef', documentElement: inputBase16},
+                // {baseCharList: '01', documentElement: inputBase2},
+            ];
+            for (i = 0; i < inputList.length; i++) {
+                let inputConfig = inputList[i];
+                inputConfig.documentElement.addEventListener('input', function() {
+                    this.value = [...this.value].filter(c => [...inputConfig.baseCharList].includes(c)).join('');
+                    let n = fromStringInBase([...inputConfig.baseCharList])([...this.value]);
+                    for (j = 0; j < inputList.length; j++) {
+                        if (i == j) {
+                            continue;
+                        }
+                        let showInputConfig = inputList[j];
+                        showInputConfig.documentElement.value = toStringInBase([...showInputConfig.baseCharList])(n).join('');
+                    }
+                });
+            }
+            function toStringInBase(baseCharList) {
+                return function(n) {
+                    let base = baseCharList.length;
+                    let resultReversed = [];
+                    while (n != 0) {
+                        resultReversed.push(baseCharList[n % base]);
+                        n = parseInt(n / base);
+                    }
+                    return resultReversed.reverse();
+                }
+            }
+            function fromStringInBase(baseCharList) {
+                return function(nString) {
+                    let base = baseCharList.length;
+                    let nStringReversed = nString.reverse();
+                    let result = 0;
+                    while (nStringReversed.length != 0) {
+                        let c = nStringReversed.pop();
+                        let n = baseCharList.findIndex(e=>c==e);
+                        result += n;
+                        if (nStringReversed.length != 0) {
+                            result *= base;
+                        }
+                    }
+                    return result;
+                }
+            }
+        </script>
+    </body>
