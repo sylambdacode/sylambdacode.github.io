@@ -19,7 +19,9 @@ main = pow N_3 N_3;</textarea>
         <span>main = <span id="result"></span></span>
         <br />
         <br />
-        <p>本页面采用WASM技术，在浏览器中运行主要由Haskell编写而成的Lambda Calculus工具集，更多信息请查看<a href="https://github.com/sylambdacode/LambdaCalculusTools">LambdaCalculusTools</a></p>
+        <p>本页面采用WASM技术，在浏览器中运行主要由Haskell编写而成的Lambda Calculus工具集。</p>
+        <p>Lambda Calculus工具集的更多信息请查看<a href="https://github.com/sylambdacode/LambdaCalculusTools">LambdaCalculusTools</a></p>
+        <br />
         <p>本页面采用<a href="https://github.com/bjorn3/browser_wasi_shim">browser_wasi_shim</a>来实现WASI，该项目由<a href="https://github.com/bjorn3">@bjorn3</a>等人实现。</p>
         <br />
         <br />
@@ -53,9 +55,8 @@ main = pow N_3 N_3;</textarea>
 
             document.getElementById('run').addEventListener('click', function () {
                 let code = document.getElementById('code').value;
-                document.getElementById('result').value = '';
+                document.getElementById('result').textContent = '';
                 runWasm(code, (buffer) => {
-                    console.log(buffer);
                     document.getElementById('result').textContent += buffer;
                 });
             });
