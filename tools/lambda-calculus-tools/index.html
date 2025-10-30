@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+
+<html >
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Lambda演算（Lambda Calculus）计算工具</title>
+    </head>
+    <body>
+        <h1>Lambda演算（Lambda Calculus）计算工具</h1>
+        <label for="code">请输入代码：</label>
+        <br />
+        <textarea id="code" rows="20" cols="80">N_3 = λf x. f (f (f x));
+pow = \x y. x y;
+main = pow N_3 N_3;</textarea>
+        <br />
+        <button id="run">Run</button>
+        <p>计算结果：</p>
+        <span>main = <span id="result"></span></span>
+        <br />
+        <br />
+        <p>本页面采用WASM技术，在浏览器中运行主要由Haskell编写而成的Lambda Calculus工具集，更多信息请查看<a href="https://github.com/sylambdacode/LambdaCalculusTools">LambdaCalculusTools</a></p>
+        <p>本页面采用<a href="https://github.com/bjorn3/browser_wasi_shim">browser_wasi_shim</a>来实现WASI，该项目由<a href="https://github.com/bjorn3">@bjorn3</a>等人实现。</p>
+        <script type="module">
+            import { Fd, File, Directory, OpenFile, ConsoleStdout, PreopenDirectory, WASI, strace } from "./browser_wasi_shim/index.js";
+            async function runWasm(code, stdout) {
+                let env = [""]; // WASI环境变量
+                let args = ['lambda-calculus-tools', 'compile', 'main', 'code.lam'];
+                // 处理标准输入、输出、错误流
+                let fds = [
+                    new OpenFile(new File()), // 标准输入
+                    new ConsoleStdout(buffer => {
+                        let s = new TextDecoder('utf-8').decode(buffer);
+                        stdout(s);
+                    }),
+                    ConsoleStdout.lineBuffered(msg => console.warn(`[WASI stderr] ${msg}`)), // 标准错误流（重定向至控制台）
+                    new PreopenDirectory(".", [
+                        ['code.lam', new File(new TextEncoder('utf-8').encode(code))]
+                    ])
+                ];
+                let wasi = new WASI(args, env, fds);
+                let __exports = {};
+                const response = await fetch('./lambda-calculus-tools.wasm');
+                const buffer = await response.arrayBuffer();
+                let instance = (await WebAssembly.instantiate(buffer, {
+                    "wasi_snapshot_preview1": wasi.wasiImport
+                })).instance; // 创建WASM实例
+                wasi.start(instance);
+            }
+
+            document.getElementById('run').addEventListener('click', function () {
+                let code = document.getElementById('code').value;
+                document.getElementById('result').value = '';
+                runWasm(code, (buffer) => {
+                    console.log(buffer);
+                    document.getElementById('result').textContent += buffer;
+                });
+            });
+        </script>
+    </body>
+</html>
