@@ -16,6 +16,10 @@ main = pow N_3 N_3;</textarea>
         <br />
         <button id="run">Run</button>
         <p>计算结果：</p>
+        <p style="color: red;" id="error-message">
+            <p>错误提示：</p>
+            <p id="error-message-content"></p>
+        </p>
         <span>main = <span id="result"></span></span>
         <br />
         <br />
@@ -28,7 +32,9 @@ main = pow N_3 N_3;</textarea>
         <a href="/">返回首页</a>
         <script type="module">
             import { Fd, File, Directory, OpenFile, ConsoleStdout, PreopenDirectory, WASI, strace } from "./browser_wasi_shim/index.js";
-            async function runWasm(code, stdout) {
+            document.getElementById('error-message').hidden = true;
+
+            async function runWasm(code, stdout, stderr) {
                 let env = [""]; // WASI环境变量
                 let args = ['lambda-calculus-tools', 'compile', 'main', 'code.lam'];
                 // 处理标准输入、输出、错误流
@@ -38,7 +44,10 @@ main = pow N_3 N_3;</textarea>
                         let s = new TextDecoder('utf-8').decode(buffer);
                         stdout(s);
                     }),
-                    ConsoleStdout.lineBuffered(msg => console.warn(`[WASI stderr] ${msg}`)), // 标准错误流（重定向至控制台）
+                    new ConsoleStdout(buffer => {
+                        let s = new TextDecoder('utf-8').decode(buffer);
+                        stderr(s);
+                    }),
                     new PreopenDirectory(".", [
                         ['code.lam', new File(new TextEncoder('utf-8').encode(code))]
                     ])
@@ -56,8 +65,15 @@ main = pow N_3 N_3;</textarea>
             document.getElementById('run').addEventListener('click', function () {
                 let code = document.getElementById('code').value;
                 document.getElementById('result').textContent = '';
+                document.getElementById('error-message').hidden = true;
+                document.getElementById('error-message-content').textContent = '';
                 runWasm(code, (buffer) => {
                     document.getElementById('result').textContent += buffer;
+                }, (buffer) => {
+                    if (document.getElementById('error-message').hidden) {
+                        document.getElementById('error-message').hidden = false;
+                    }
+                    document.getElementById('error-message-content').textContent += buffer;
                 });
             });
         </script>
