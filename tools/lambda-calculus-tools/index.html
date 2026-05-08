@@ -10,17 +10,26 @@
         <h1>Lambda演算（Lambda Calculus）计算工具</h1>
         <label for="code">请输入代码：</label>
         <br />
-        <textarea id="code" rows="20" cols="80">N_3 = λf x. f (f (f x));
-pow = \x y. x y;
-main = pow N_3 N_3;</textarea>
+        <textarea id="code" rows="20" cols="80"></textarea>
         <br />
-        <button id="run">Run</button>
+	<span>
+            <button id="calculate">计算</button>
+            <button id="run">运行</button>
+	</span>
+
+	<span>
+            <button id="loadCalculateModeCode">加载示例（计算3的3次方）</button>
+            <button id="loadRunModeCode">加载示例（Hello world）</button>
+	</span>
+
         <div style="color: red;" id="error-message">
             <p>错误提示：</p>
             <p id="error-message-content"></p>
         </div>
-        <p>计算结果：</p>
-        <span>main = <span id="result"></span></span>
+	<p id="resultTitle"></p>
+        <span id="result"></span>
+	<br />
+	<span id="resultBytes"></span>
         <br />
         <br />
         <p>本页面采用WASM技术，在浏览器中运行主要由Haskell编写而成的Lambda Calculus工具集。</p>
@@ -32,11 +41,20 @@ main = pow N_3 N_3;</textarea>
         <a href="/">返回首页</a>
         <script type="module">
             import { Fd, File, Directory, OpenFile, ConsoleStdout, PreopenDirectory, WASI, strace } from "./browser_wasi_shim/index.js";
+
+	    const calculateModeCode = '{-点击计算按钮-}\nN_3 = λf x. f (f (f x));\npow = \\x y. x y;\nmain = pow N_3 N_3;';
+	    const runModeCode = '{-点击运行按钮-}\nmain = (λinput.(λf.((f (λx.(λy.y))) (λf.((f (λx.(λy.x))) (λf.((f (λx.(λy.x))) (λf.((f (λx.(λy.y))) (λf.((f (λx.(λy.x))) (λf.((f (λx.(λy.y))) (λf.((f (λx.(λy.y))) (λf.((f (λx.(λy.y))) (λf.((f (λx.(λy.y))) (λf.((f (λx.(λy.x))) (λf.((f (λx.(λy.x))) (λf.((f (λx.(λy.y))) (λf.((f (λx.(λy.y))) (λf.((f (λx.(λy.x))) (λf.((f (λx.(λy.y))) (λf.((f (λx.(λy.x))) (λf.((f (λx.(λy.y))) (λf.((f (λx.(λy.x))) (λf.((f (λx.(λy.x))) (λf.((f (λx.(λy.y))) (λf.((f (λx.(λy.x))) (λf.((f (λx.(λy.x))) (λf.((f (λx.(λy.y))) (λf.((f (λx.(λy.y))) (λf.((f (λx.(λy.y))) (λf.((f (λx.(λy.x))) (λf.((f (λx.(λy.x))) (λf.((f (λx.(λy.y))) (λf.((f (λx.(λy.x))) (λf.((f (λx.(λy.x))) (λf.((f (λx.(λy.y))) (λf.((f (λx.(λy.y))) (λf.((f (λx.(λy.y))) (λf.((f (λx.(λy.x))) (λf.((f (λx.(λy.x))) (λf.((f (λx.(λy.y))) (λf.((f (λx.(λy.x))) (λf.((f (λx.(λy.x))) (λf.((f (λx.(λy.x))) (λf.((f (λx.(λy.x))) (λf.((f (λx.(λy.y))) (λf.((f (λx.(λy.y))) (λf.((f (λx.(λy.x))) (λf.((f (λx.(λy.y))) (λf.((f (λx.(λy.x))) (λf.((f (λx.(λy.x))) (λf.((f (λx.(λy.y))) (λf.((f (λx.(λy.y))) (λf.((f (λx.(λy.y))) (λf.((f (λx.(λy.y))) (λf.((f (λx.(λy.x))) (λf.((f (λx.(λy.y))) (λf.((f (λx.(λy.y))) (λf.((f (λx.(λy.y))) (λf.((f (λx.(λy.y))) (λf.((f (λx.(λy.y))) (λf.((f (λx.(λy.y))) (λf.((f (λx.(λy.x))) (λf.((f (λx.(λy.x))) (λf.((f (λx.(λy.x))) (λf.((f (λx.(λy.y))) (λf.((f (λx.(λy.x))) (λf.((f (λx.(λy.x))) (λf.((f (λx.(λy.x))) (λf.((f (λx.(λy.y))) (λf.((f (λx.(λy.x))) (λf.((f (λx.(λy.x))) (λf.((f (λx.(λy.y))) (λf.((f (λx.(λy.x))) (λf.((f (λx.(λy.x))) (λf.((f (λx.(λy.x))) (λf.((f (λx.(λy.x))) (λf.((f (λx.(λy.y))) (λf.((f (λx.(λy.x))) (λf.((f (λx.(λy.x))) (λf.((f (λx.(λy.x))) (λf.((f (λx.(λy.y))) (λf.((f (λx.(λy.y))) (λf.((f (λx.(λy.x))) (λf.((f (λx.(λy.y))) (λf.((f (λx.(λy.y))) (λf.((f (λx.(λy.x))) (λf.((f (λx.(λy.x))) (λf.((f (λx.(λy.y))) (λf.((f (λx.(λy.x))) (λf.((f (λx.(λy.x))) (λf.((f (λx.(λy.y))) (λf.((f (λx.(λy.y))) (λf.((f (λx.(λy.y))) (λf.((f (λx.(λy.x))) (λf.((f (λx.(λy.x))) (λf.((f (λx.(λy.y))) (λf.((f (λx.(λy.y))) (λf.((f (λx.(λy.x))) (λf.((f (λx.(λy.y))) (λf.((f (λx.(λy.y))) (λf.((f (λx.(λy.y))) (λf.((f (λx.(λy.y))) (λf.((f (λx.(λy.x))) (λf.((f (λx.(λy.y))) (λf.((f (λx.(λy.y))) (λf.((f (λx.(λy.y))) (λf.((f (λx.(λy.y))) (λf.((f (λx.(λy.x))) (λf.((f (λx.(λy.y))) (λf.((f (λx.(λy.y))) (λf.((f (λx.(λy.y))) (λf.((f (λx.(λy.y))) (λf.((f (λx.(λy.x))) (λf.((f (λx.(λy.y))) (λf.((f (λx.(λy.x))) (λf.((f (λx.(λy.y))) (λx.(λy.y)))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))));';
+
             document.getElementById('error-message').hidden = true;
 
-            async function runWasm(code, stdout, stderr) {
+            async function runWasm(code, stdout, stderr, mode) {
                 let env = [""]; // WASI环境变量
-                let args = ['lambda-calculus-tools', 'calculate', 'main', 'code.lam'];
+		let args = undefined
+		if (mode == "calculate") {
+                    args = ['lambda-calculus-tools', 'calculate', 'main', 'code.lam'];
+		} else {
+                    args = ['lambda-calculus-tools', 'run', 'code.lam'];
+		}
                 // 处理标准输入、输出、错误流
                 let fds = [
                     new OpenFile(new File()), // 标准输入
@@ -62,9 +80,11 @@ main = pow N_3 N_3;</textarea>
                 wasi.start(instance);
             }
 
-            document.getElementById('run').addEventListener('click', function () {
+            document.getElementById('calculate').addEventListener('click', function () {
                 let code = document.getElementById('code').value;
+                document.getElementById('resultTitle').textContent = 'main函数的计算结果：';
                 document.getElementById('result').textContent = '';
+                document.getElementById('resultBytes').hidden = true;
                 document.getElementById('error-message').hidden = true;
                 document.getElementById('error-message-content').textContent = '';
                 runWasm(code, (buffer) => {
@@ -74,8 +94,51 @@ main = pow N_3 N_3;</textarea>
                         document.getElementById('error-message').hidden = false;
                     }
                     document.getElementById('error-message-content').textContent += buffer;
-                });
+                }, 'calculate');
             });
+
+            document.getElementById('run').addEventListener('click', function () {
+                let code = document.getElementById('code').value;
+                document.getElementById('resultTitle').textContent = '运行结果';
+                document.getElementById('result').textContent = '';
+                document.getElementById('resultBytes').textContent = '';
+                document.getElementById('resultBytes').hidden = false;
+                document.getElementById('error-message').hidden = true;
+                document.getElementById('error-message-content').textContent = '';
+		let bitCount = 0;
+		let bitString = '';
+		function addBit(bit) {
+                    bitCount++;
+		    bitString += bit;
+		    if (bitCount == 8) {
+		        document.getElementById('resultBytes').textContent += String.fromCharCode(parseInt(bitString, 2))
+			bitCount = 0;
+			bitString = '';
+		    }
+		}
+                runWasm(code, (buffer) => {
+                    document.getElementById('result').textContent += buffer;
+		    for (let i = 0; i < buffer.length; i++) {
+                        addBit(buffer[i]);
+		    }
+                }, (buffer) => {
+                    if (document.getElementById('error-message').hidden) {
+                        document.getElementById('error-message').hidden = false;
+                    }
+                    document.getElementById('error-message-content').textContent += buffer;
+                }, 'run');
+            });
+
+            document.getElementById('loadCalculateModeCode').addEventListener('click', function () {
+                document.getElementById('code').value = calculateModeCode;
+            });
+            document.getElementById('loadRunModeCode').addEventListener('click', function () {
+                document.getElementById('code').value = runModeCode;
+            });
+
+            document.getElementById('code').value = calculateModeCode;
+            document.getElementById('resultBytes').hidden = true;
+
         </script>
     </body>
 </html>
