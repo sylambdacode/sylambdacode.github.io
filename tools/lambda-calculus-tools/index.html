@@ -36,7 +36,7 @@ main = pow N_3 N_3;</textarea>
 
             async function runWasm(code, stdout, stderr) {
                 let env = [""]; // WASI环境变量
-                let args = ['lambda-calculus-tools', 'compile', 'main', 'code.lam'];
+                let args = ['lambda-calculus-tools', 'calculate', 'main', 'code.lam'];
                 // 处理标准输入、输出、错误流
                 let fds = [
                     new OpenFile(new File()), // 标准输入
