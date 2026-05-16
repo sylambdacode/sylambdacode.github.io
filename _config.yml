@@ -12,6 +12,6 @@ moving:
   social_links:
     github: sylambdacode
 timezone: Asia/Shanghai
-remote_theme: huangyz0918/moving
+remote_theme: sylambdacode/moving
 plugins:
 - jekyll-remote-theme
